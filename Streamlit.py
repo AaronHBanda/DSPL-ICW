@@ -119,3 +119,67 @@ st.markdown(f"""
         </div>
     </div>
 """, unsafe_allow_html=True)
+
+# Display the dataset
+st.subheader("Dataset Preview")
+st.dataframe(df)
+
+# Plot 1: NDVI over time
+st.subheader("NDVI Trends Over Time")
+fig1 = px.line(filtered_df, x='Date', y='NDVI Value', title='NDVI Over Time', labels={'NDVI Value': 'NDVI', 'Date': 'Date'})
+st.plotly_chart(fig1, use_container_width=True)
+
+# Plot 2: NDVI vs Long-Term Average 
+st.subheader("NDVI vs Long-Term Average (LTA)")
+fig2 = px.line(
+    filtered_df,
+    x='Date',
+    y=['NDVI Value', 'Long Term Average NDVI'],
+    title='NDVI vs Long-Term Average',
+    labels={'value': 'NDVI', 'variable': 'NDVI Type', 'Date': 'Date'}
+)
+
+fig2.for_each_trace(
+    lambda t: t.update(line=dict(color='light blue')) if t.name == 'NDVI Value' else t.update(line=dict(color='orange'))
+)
+
+st.plotly_chart(fig2, use_container_width=True)
+
+# Plot 3: NDVI Anomaly (%)
+st.subheader("NDVI Anomalies [%]")
+fig3 = px.bar(filtered_df, x='Date', y='NDVI Anomaly in Percentage (%)', title='NDVI Anomaly (%) Over Time',
+              labels={'NDVI Anomaly in Percentage (%)': 'NDVI Anomaly (%)', 'Date': 'Date'})
+st.plotly_chart(fig3, use_container_width=True)
+
+# Plot 4: Number of Pixels Used
+st.subheader("Number of Pixels Used")
+fig4 = px.line(
+    filtered_df,
+    x='Date',
+    y='Number of Pixels',
+    title='Number of Pixels Used (Data Coverage)',
+    labels={'Number of Pixels': 'Pixels', 'Date': 'Date'}
+)
+fig4.update_traces(line=dict(color='red')) 
+st.plotly_chart(fig4, use_container_width=True)
+
+# Plot 5: Seasonal NDVI Averages
+st.subheader("Seasonal NDVI Averages")
+df['Month'] = df['Date'].dt.month
+fig5 = px.bar(df, x='Month', y='NDVI Value', title='NDVI by Month Across Years',
+              labels={'Month': 'Month', 'NDVI Value': 'NDVI'})
+st.plotly_chart(fig5, use_container_width=True)
+
+
+# Plot 6: NDVI Value vs Long Term Average NDVI
+st.subheader("NDVI Value vs Long Term Average NDVI")
+fig6 = px.scatter(
+    filtered_df,
+    x='NDVI Value',
+    y='Long Term Average NDVI',
+    title='NDVI Value vs Long Term Average NDVI',
+    labels={'NDVI Value': 'NDVI Value', 'Long Term Average NDVI': 'Long Term Average NDVI'},
+    opacity=0.6,
+    trendline="ols"
+)
+st.plotly_chart(fig6, use_container_width=True)
