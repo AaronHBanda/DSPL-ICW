@@ -30,3 +30,25 @@ st.markdown("""
         Visualizing vegetation health across Sri Lanka using NDVI data from NASA MODIS satellites. <br><br>
     </p>
 """, unsafe_allow_html=True)
+
+# Sidebar filters
+region_options = df['District'].unique()
+selected_region = st.sidebar.selectbox("Select District", sorted(region_options))
+
+# Horizontal date range slider
+date_min = df['Date'].min().date()
+date_max = df['Date'].max().date()
+date_range = st.sidebar.slider(
+    "Select Date Range",
+    min_value=date_min,
+    max_value=date_max,
+    value=(date_min, date_max),
+    format="YYYY-MM"
+)
+
+mask = (
+    (df['District'] == selected_region) &
+    (df['Date'] >= pd.to_datetime(date_range[0])) &
+    (df['Date'] <= pd.to_datetime(date_range[1]))
+)
+filtered_df = df[mask]
