@@ -22,3 +22,11 @@ def load_data():
     return df
 
 df = load_data()
+
+# Title and Description 
+st.markdown("""
+    <h1 style='font-size: 60px; color: orange;'>Sri Lanka NDVI Dashboard (2002 - 2025)</h1>
+    <p style='font-size: 17px; color: pink;'>
+        Visualizing vegetation health across Sri Lanka using NDVI data from NASA MODIS satellites. <br><br>
+    </p>
+""", unsafe_allow_html=True)
