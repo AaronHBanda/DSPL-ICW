@@ -45,10 +45,77 @@ date_range = st.sidebar.slider(
     value=(date_min, date_max),
     format="YYYY-MM"
 )
-
+# District filters
 mask = (
     (df['District'] == selected_region) &
     (df['Date'] >= pd.to_datetime(date_range[0])) &
     (df['Date'] <= pd.to_datetime(date_range[1]))
 )
 filtered_df = df[mask]
+
+# Summary metrics
+st.subheader("NDVI Summary Statistics")
+
+avg_ndvi = round(filtered_df['NDVI Value'].mean(), 3)
+max_ndvi = round(filtered_df['NDVI Value'].max(), 3)
+min_ndvi = round(filtered_df['NDVI Value'].min(), 3)
+
+st.markdown("""
+    <style>
+    .metrics-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+    .metric-container {
+        flex: 1;
+        background-color: 	#343434;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .metric-label {
+        font-weight: bold;
+        color: #FFFFFF;
+        font-size: 18px;
+    }
+    .metric-value {
+        font-size: 35px;
+        color: #0072B2;
+    }
+    .metric-delta-positive {
+        font-size: 15px;
+        color: green;
+    }
+    .metric-delta-negative {
+        font-size: 14px;
+        color: red;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+def delta_html(value):
+    if value >= 0:
+        return f'<div class="metric-delta-positive">↑ {value:+.3f}</div>'
+    else:
+        return f'<div class="metric-delta-negative">↓ {value:+.3f}</div>'
+
+st.markdown(f"""
+    <div class="metrics-row">
+        <div class="metric-container">
+            <div class="metric-label">Average NDVI</div>
+            <div class="metric-value">{avg_ndvi}</div>
+        </div>
+        <div class="metric-container">
+            <div class="metric-label">Max NDVI</div>
+            <div class="metric-value">{max_ndvi}</div>
+            {delta_html(max_ndvi - avg_ndvi)}
+        </div>
+        <div class="metric-container">
+            <div class="metric-label">Min NDVI</div>
+            <div class="metric-value">{min_ndvi}</div>
+            {delta_html(min_ndvi - avg_ndvi)}
+        </div>
+    </div>
+""", unsafe_allow_html=True)
