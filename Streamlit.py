@@ -25,8 +25,8 @@ df = load_data()
 
 # Title and Description 
 st.markdown("""
-    <h1 style='font-size: 60px; color: orange;'>Sri Lanka NDVI Dashboard (2002 - 2025)</h1>
-    <p style='font-size: 17px; color: pink;'>
+    <h1 style='font-size: 52px;'>Sri Lanka NDVI Dashboard (2002 - 2025)</h1>
+    <p style='font-size: 17px;'>
         Visualizing vegetation health across Sri Lanka using NDVI data from NASA MODIS satellites. <br><br>
     </p>
 """, unsafe_allow_html=True)
@@ -69,7 +69,7 @@ st.markdown("""
     }
     .metric-container {
         flex: 1;
-        background-color: 	#343434;
+        background-color: 	#1B1B1B;
         padding: 20px;
         border-radius: 10px;
         text-align: center;
